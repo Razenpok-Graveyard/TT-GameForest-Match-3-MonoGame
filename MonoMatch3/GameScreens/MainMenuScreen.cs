@@ -1,54 +1,22 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MainMenuScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
-
 using Microsoft.Xna.Framework;
-
-#endregion
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoMatch3
 {
-    /// <summary>
-    /// The main menu screen is the first thing displayed when the game starts up.
-    /// </summary>
     class MainMenuScreen : MenuScreen
     {
-        #region Initialization
-
-
-        /// <summary>
-        /// Constructor fills in the menu contents.
-        /// </summary>
         public MainMenuScreen()
-            : base("Main Menu")
         {
-            // Create our menu entries.
-            MenuEntry playGameMenuEntry = new MenuEntry("Play Game");
-            MenuEntry optionsMenuEntry = new MenuEntry("Options");
-            MenuEntry exitMenuEntry = new MenuEntry("Exit");
+            var content = Game1.Instance.Content;
+            var playButtonTexture = content.Load<Texture2D>("Play");
+            var playButton = new MenuEntry(playButtonTexture, new Point(300, 200));
 
             // Hook up menu event handlers.
-            playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
-            optionsMenuEntry.Selected += OptionsMenuEntrySelected;
-            exitMenuEntry.Selected += OnCancel;
+            playButton.Selected += PlayGameMenuEntrySelected;
 
             // Add entries to the menu.
-            MenuEntries.Add(playGameMenuEntry);
-            MenuEntries.Add(optionsMenuEntry);
-            MenuEntries.Add(exitMenuEntry);
+            MenuEntries.Add(playButton);
         }
-
-
-        #endregion
-
-        #region Handle Input
 
 
         /// <summary>
@@ -58,15 +26,6 @@ namespace MonoMatch3
         {
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
                                new GameplayScreen());
-        }
-
-
-        /// <summary>
-        /// Event handler for when the Options menu entry is selected.
-        /// </summary>
-        void OptionsMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            ScreenManager.AddScreen(new OptionsMenuScreen(), e.PlayerIndex);
         }
 
 
@@ -93,8 +52,5 @@ namespace MonoMatch3
         {
             ScreenManager.Game.Exit();
         }
-
-
-        #endregion
     }
 }

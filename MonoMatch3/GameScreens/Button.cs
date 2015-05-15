@@ -11,181 +11,75 @@ using System;
 using GameStateManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace MonoMatch3
 {
-    /// <summary>
-    /// A special button that handles toggling between "On" and "Off"
-    /// </summary>
-    class BooleanButton : Button
+    class Clickable: DrawableGameComponent
     {
-        private string option;
-        private bool value;
+        protected Rectangle Rectangle { get; set;}
 
-        /// <summary>
-        /// Creates a new BooleanButton.
-        /// </summary>
-        /// <param name="option">The string text to display for the option.</param>
-        /// <param name="value">The initial value of the button.</param>
-        public BooleanButton(string option, bool value)
-            : base(option)
+        public Point Position
         {
-            this.option = option;
-            this.value = value;
-
-            GenerateText();
+            get { return new Point(Rectangle.X, Rectangle.Y); }
+            set { Rectangle = new Rectangle(Position, value);}
         }
 
-        protected override void OnTapped()
-        {
-            // When tapped we need to toggle the value and regenerate the text
-            value = !value;
-            GenerateText();
+        protected bool IsHighlighted { get; private set; }
+        public bool IsClicked;
 
-            base.OnTapped();
+        protected new Game1 Game { get { return (Game1)base.Game; } }
+
+        private ButtonState oldClickState = ButtonState.Released;
+
+        protected Clickable(Rectangle targetRectangle): base(Game1.Instance)
+        {
+            Rectangle = targetRectangle;
         }
 
-        /// <summary>
-        /// Helper that generates the actual Text value the base class uses for drawing.
-        /// </summary>
-        private void GenerateText()
+        protected Clickable() : base(Game1.Instance)
         {
-            Text = string.Format("{0}: {1}", option, value ? "On" : "Off");
+        }
+
+        protected void HandleInput()
+        {
+            IsHighlighted = false;
+            IsClicked = false;
+            var mouseState = Mouse.GetState();
+            if (!Rectangle.Contains(new Point(mouseState.X, mouseState.Y))) return;
+            IsHighlighted = true;
+            IsClicked = mouseState.LeftButton == ButtonState.Pressed;
+            oldClickState = mouseState.LeftButton;
         }
     }
 
-    /// <summary>
-    /// Represents a touchable button.
-    /// </summary>
-    class Button
+    class Button: Clickable
     {
-        /// <summary>
-        /// The text displayed in the button.
-        /// </summary>
-        public string Text = "Button";
+        protected readonly Texture2D texture;
 
-        /// <summary>
-        /// The position of the top-left corner of the button.
-        /// </summary>
-        public Vector2 Position = Vector2.Zero;
-
-        /// <summary>
-        /// The size of the button.
-        /// </summary>
-        public Vector2 Size = new Vector2(250, 75);
-
-        /// <summary>
-        /// The thickness of the border drawn for the button.
-        /// </summary>
-        public int BorderThickness = 4;
-
-        /// <summary>
-        /// The color of the button border.
-        /// </summary>
-        public Color BorderColor = new Color(200, 200, 200);
-
-        /// <summary>
-        /// The color of the button background.
-        /// </summary>
-        public Color FillColor = new Color(100, 100, 100) * .75f;
-
-        /// <summary>
-        /// The color of the text.
-        /// </summary>
-        public Color TextColor = Color.White;
-
-        /// <summary>
-        /// The opacity of the button.
-        /// </summary>
-        public float Alpha = 0f;
-
-        /// <summary>
-        /// Invoked when the button is tapped.
-        /// </summary>
-        public event EventHandler<EventArgs> Tapped;
-        
-        /// <summary>
-        /// Creates a new Button.
-        /// </summary>
-        /// <param name="text">The text to display in the button.</param>
-        public Button(string text)
+        public Button(Texture2D texture, Point position)
         {
-            Text = text;
+            this.texture = texture;
+            Rectangle = new Rectangle(position, new Point(texture.Width, texture.Height));
         }
 
-        /// <summary>
-        /// Invokes the Tapped event and allows subclasses to perform actions when tapped.
-        /// </summary>
-        protected virtual void OnTapped()
+        public override void Update(GameTime gameTime)
         {
-            if (Tapped != null)
-                Tapped(this, EventArgs.Empty);
+            HandleInput();
+            base.Update(gameTime);
         }
 
-        /// <summary>
-        /// Passes a tap location to the button for handling.
-        /// </summary>
-        /// <param name="tap">The location of the tap.</param>
-        /// <returns>True if the button was tapped, false otherwise.</returns>
-        public bool HandleTap(Vector2 tap)
+        public override void Draw(GameTime gameTime)
         {
-            if (tap.X >= Position.X &&
-                tap.Y >= Position.Y &&
-                tap.X <= Position.X + Size.X &&
-                tap.Y <= Position.Y + Size.Y)
-            {
-                OnTapped();
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Draws the button
-        /// </summary>
-        /// <param name="screen">The screen drawing the button</param>
-        public void Draw(GameScreen screen)
-        {
-            // Grab some common items from the ScreenManager
-            SpriteBatch spriteBatch = screen.ScreenManager.SpriteBatch;
-            SpriteFont font = screen.ScreenManager.Font;
-            Texture2D blank = screen.ScreenManager.BlankTexture;
-
-            // Compute the button's rectangle
-            Rectangle r = new Rectangle(
-                (int)Position.X,
-                (int)Position.Y,
-                (int)Size.X,
-                (int)Size.Y);
-
-            // Fill the button
-            spriteBatch.Draw(blank, r, FillColor * Alpha);
-
-            // Draw the border
-            spriteBatch.Draw(
-                blank, 
-                new Rectangle(r.Left, r.Top, r.Width, BorderThickness),
-                BorderColor * Alpha);
-            spriteBatch.Draw(
-                blank, 
-                new Rectangle(r.Left, r.Top, BorderThickness, r.Height),
-                BorderColor * Alpha);
-            spriteBatch.Draw(
-                blank, 
-                new Rectangle(r.Right - BorderThickness, r.Top, BorderThickness, r.Height),
-                BorderColor * Alpha);
-            spriteBatch.Draw(
-                blank, 
-                new Rectangle(r.Left, r.Bottom - BorderThickness, r.Width, BorderThickness),
-                BorderColor * Alpha);
-
-            // Draw the text centered in the button
-            Vector2 textSize = font.MeasureString(Text);
-            Vector2 textPosition = new Vector2(r.Center.X, r.Center.Y) - textSize / 2f;
-            textPosition.X = (int)textPosition.X;
-            textPosition.Y = (int)textPosition.Y;
-            spriteBatch.DrawString(font, Text, textPosition, TextColor * Alpha);
+            var color = Color.White;
+            if (IsHighlighted)
+                color = Color.Wheat;
+            if (IsClicked)
+                color = Color.Orange;
+            Game.SpriteBatch.Begin();
+            Game.SpriteBatch.Draw(texture, Rectangle, color);
+            Game.SpriteBatch.End();
+            base.Draw(gameTime);
         }
     }
 }

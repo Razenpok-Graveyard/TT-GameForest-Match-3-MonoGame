@@ -1,22 +1,10 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MenuScreen.cs
-//
-// XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
-
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameStateManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-#endregion
 
 namespace MonoMatch3
 {
@@ -26,21 +14,13 @@ namespace MonoMatch3
     /// </summary>
     abstract class MenuScreen : GameScreen
     {
-        #region Fields
-
         List<MenuEntry> menuEntries = new List<MenuEntry>();
         int selectedEntry = 0;
-        string menuTitle;
 
         InputAction menuUp;
         InputAction menuDown;
         InputAction menuSelect;
         InputAction menuCancel;
-
-        #endregion
-
-        #region Properties
-
 
         /// <summary>
         /// Gets the list of menu entries, so derived classes can add
@@ -51,19 +31,11 @@ namespace MonoMatch3
             get { return menuEntries; }
         }
 
-
-        #endregion
-
-        #region Initialization
-
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MenuScreen(string menuTitle)
+        public MenuScreen()
         {
-            this.menuTitle = menuTitle;
-
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
 
@@ -84,12 +56,6 @@ namespace MonoMatch3
                 new Keys[] { Keys.Escape },
                 true);
         }
-
-
-        #endregion
-
-        #region Handle Input
-
 
         /// <summary>
         /// Responds to user input, changing the selected entry and accepting
@@ -121,6 +87,10 @@ namespace MonoMatch3
                 if (selectedEntry >= menuEntries.Count)
                     selectedEntry = 0;
             }
+
+            var clickedItem = MenuEntries.FirstOrDefault(entry => entry.IsClicked);
+            if (clickedItem != null)
+                clickedItem.OnSelectEntry(playerIndex);
 
             if (menuSelect.Evaluate(input, ControllingPlayer, out playerIndex))
             {
@@ -158,12 +128,6 @@ namespace MonoMatch3
         {
             OnCancel(e.PlayerIndex);
         }
-
-
-        #endregion
-
-        #region Update and Draw
-
 
         /// <summary>
         /// Allows the screen the chance to position the menu entries. By default
@@ -234,7 +198,7 @@ namespace MonoMatch3
             spriteBatch.Begin();
 
             // Draw each menu entry in turn.
-            for (int i = 0; i < menuEntries.Count; i++)
+            for (var i = 0; i < menuEntries.Count; i++)
             {
                 MenuEntry menuEntry = menuEntries[i];
 
@@ -242,27 +206,7 @@ namespace MonoMatch3
 
                 menuEntry.Draw(this, isSelected, gameTime);
             }
-
-            // Make the menu slide into place during transitions, using a
-            // power curve to make things look more interesting (this makes
-            // the movement slow down as it nears the end).
-            float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-
-            // Draw the menu title centered on the screen
-            Vector2 titlePosition = new Vector2(graphics.Viewport.Width / 2, 80);
-            Vector2 titleOrigin = font.MeasureString(menuTitle) / 2;
-            Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
-            float titleScale = 1.25f;
-
-            titlePosition.Y -= transitionOffset * 100;
-
-            spriteBatch.DrawString(font, menuTitle, titlePosition, titleColor, 0,
-                                   titleOrigin, titleScale, SpriteEffects.None, 0);
-
             spriteBatch.End();
         }
-
-
-        #endregion
     }
 }

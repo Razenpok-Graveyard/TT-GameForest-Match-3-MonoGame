@@ -47,7 +47,6 @@
     <Compile Include="GameScreens\MenuEntry.cs" />
     <Compile Include="GameScreens\MenuScreen.cs" />
     <Compile Include="GameScreens\MessageBoxScreen.cs" />
-    <Compile Include="GameScreens\OptionsMenuScreen.cs" />
     <Compile Include="GameScreens\PauseMenuScreen.cs" />
     <Compile Include="GameScreens\PlayerIndexEventArgs.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />

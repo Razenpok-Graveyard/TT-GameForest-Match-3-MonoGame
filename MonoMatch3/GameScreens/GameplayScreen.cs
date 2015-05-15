@@ -28,8 +28,6 @@ namespace MonoMatch3
     /// </summary>
     class GameplayScreen : GameScreen
     {
-        #region Fields
-
         ContentManager content;
         SpriteFont gameFont;
 
@@ -41,11 +39,6 @@ namespace MonoMatch3
         float pauseAlpha;
 
         InputAction pauseAction;
-
-        #endregion
-
-        #region Initialization
-
 
         /// <summary>
         /// Constructor.
@@ -72,6 +65,8 @@ namespace MonoMatch3
                 if (content == null)
                     content = new ContentManager(ScreenManager.Game.Services, "Content");
 
+                var texture = content.Load<Texture2D>("Play");
+                testplay = new Button(texture, new Point(50, 50));
                 gameFont = content.Load<SpriteFont>("Font");
 
                 // A real game would probably have more content than this sample, so
@@ -84,52 +79,13 @@ namespace MonoMatch3
                 // it should not try to catch up.
                 ScreenManager.Game.ResetElapsedTime();
             }
-
-#if WINDOWS_PHONE
-            if (Microsoft.Phone.Shell.PhoneApplicationService.Current.State.ContainsKey("PlayerPosition"))
-            {
-                playerPosition = (Vector2)Microsoft.Phone.Shell.PhoneApplicationService.Current.State["PlayerPosition"];
-                enemyPosition = (Vector2)Microsoft.Phone.Shell.PhoneApplicationService.Current.State["EnemyPosition"];
-            }
-#endif
         }
 
-
-        public override void Deactivate()
-        {
-#if WINDOWS_PHONE
-            Microsoft.Phone.Shell.PhoneApplicationService.Current.State["PlayerPosition"] = playerPosition;
-            Microsoft.Phone.Shell.PhoneApplicationService.Current.State["EnemyPosition"] = enemyPosition;
-#endif
-
-            base.Deactivate();
-        }
-
-
-        /// <summary>
-        /// Unload graphics content used by the game.
-        /// </summary>
         public override void Unload()
         {
             content.Unload();
-
-#if WINDOWS_PHONE
-            Microsoft.Phone.Shell.PhoneApplicationService.Current.State.Remove("PlayerPosition");
-            Microsoft.Phone.Shell.PhoneApplicationService.Current.State.Remove("EnemyPosition");
-#endif
         }
 
-
-        #endregion
-
-        #region Update and Draw
-
-
-        /// <summary>
-        /// Updates the state of the game. This method checks the GameScreen.IsActive
-        /// property, so the game will stop updating when the pause menu is active,
-        /// or if you tab away to a different application.
-        /// </summary>
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
@@ -187,12 +143,9 @@ namespace MonoMatch3
             PlayerIndex player;
             if (pauseAction.Evaluate(input, ControllingPlayer, out player) || gamePadDisconnected)
             {
-#if WINDOWS_PHONE
-                ScreenManager.AddScreen(new PhonePauseScreen(), ControllingPlayer);
-#else
                 ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
-#endif
             }
+
             else
             {
                 // Otherwise move the player position.
@@ -230,10 +183,8 @@ namespace MonoMatch3
             }
         }
 
+        private Button testplay;
 
-        /// <summary>
-        /// Draws the gameplay screen.
-        /// </summary>
         public override void Draw(GameTime gameTime)
         {
             // This game has a blue background. Why? Because!
@@ -259,9 +210,7 @@ namespace MonoMatch3
 
                 ScreenManager.FadeBackBufferToBlack(alpha);
             }
+            testplay.Draw(gameTime);
         }
-
-
-        #endregion
     }
 }

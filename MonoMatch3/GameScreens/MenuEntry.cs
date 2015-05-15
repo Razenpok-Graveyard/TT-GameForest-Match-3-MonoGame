@@ -1,38 +1,12 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// MenuEntry.cs
-//
-// XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
-
 using System;
 using GameStateManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-#endregion
-
 namespace MonoMatch3
 {
-    /// <summary>
-    /// Helper class represents a single entry in a MenuScreen. By default this
-    /// just draws the entry text string, but it can be customized to display menu
-    /// entries in different ways. This also provides an event that will be raised
-    /// when the menu entry is selected.
-    /// </summary>
-    class MenuEntry
+    class MenuEntry: Button
     {
-        #region Fields
-
-        /// <summary>
-        /// The text rendered for this entry.
-        /// </summary>
-        string text;
-
         /// <summary>
         /// Tracks a fading selection effect on the entry.
         /// </summary>
@@ -47,21 +21,6 @@ namespace MonoMatch3
         /// </summary>
         Vector2 position;
 
-        #endregion
-
-        #region Properties
-
-
-        /// <summary>
-        /// Gets or sets the text of this menu entry.
-        /// </summary>
-        public string Text
-        {
-            get { return text; }
-            set { text = value; }
-        }
-
-
         /// <summary>
         /// Gets or sets the position at which to draw this menu entry.
         /// </summary>
@@ -71,67 +30,30 @@ namespace MonoMatch3
             set { position = value; }
         }
 
-
-        #endregion
-
-        #region Events
-
-
-        /// <summary>
-        /// Event raised when the menu entry is selected.
-        /// </summary>
         public event EventHandler<PlayerIndexEventArgs> Selected;
-
-
-        /// <summary>
-        /// Method for raising the Selected event.
-        /// </summary>
+        
         protected internal virtual void OnSelectEntry(PlayerIndex playerIndex)
         {
             if (Selected != null)
                 Selected(this, new PlayerIndexEventArgs(playerIndex));
         }
-
-
-        #endregion
-
-        #region Initialization
-
-
-        /// <summary>
-        /// Constructs a new menu entry with the specified text.
-        /// </summary>
-        public MenuEntry(string text)
+        
+        public MenuEntry(Texture2D texture, Point position): base(texture, position)
         {
-            this.text = text;
         }
-
-
-        #endregion
-
-        #region Update and Draw
-
-
-        /// <summary>
-        /// Updates the menu entry.
-        /// </summary>
+        
         public virtual void Update(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            // there is no such thing as a selected item on Windows Phone, so we always
-            // force isSelected to be false
-#if WINDOWS_PHONE
-            isSelected = false;
-#endif
-
             // When the menu selection changes, entries gradually fade between
             // their selected and deselected appearance, rather than instantly
             // popping to the new state.
             float fadeSpeed = (float)gameTime.ElapsedGameTime.TotalSeconds * 4;
 
-            if (isSelected)
+            if (IsClicked)
                 selectionFade = Math.Min(selectionFade + fadeSpeed, 1);
             else
                 selectionFade = Math.Max(selectionFade - fadeSpeed, 0);
+            base.Update(gameTime);
         }
 
 
@@ -140,14 +62,8 @@ namespace MonoMatch3
         /// </summary>
         public virtual void Draw(MenuScreen screen, bool isSelected, GameTime gameTime)
         {
-            // there is no such thing as a selected item on Windows Phone, so we always
-            // force isSelected to be false
-#if WINDOWS_PHONE
-            isSelected = false;
-#endif
-
             // Draw the selected entry in yellow, otherwise white.
-            Color color = isSelected ? Color.Yellow : Color.White;
+            Color color = IsClicked ? Color.Yellow : Color.White;
 
             // Pulsate the size of the selected menu entry.
             double time = gameTime.TotalGameTime.TotalSeconds;
@@ -166,8 +82,7 @@ namespace MonoMatch3
 
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
 
-            spriteBatch.DrawString(font, text, position, color, 0,
-                                   origin, scale, SpriteEffects.None, 0);
+            base.Draw(gameTime);
         }
 
 
@@ -185,10 +100,7 @@ namespace MonoMatch3
         /// </summary>
         public virtual int GetWidth(MenuScreen screen)
         {
-            return (int)screen.ScreenManager.Font.MeasureString(Text).X;
+            return texture.Width;
         }
-
-
-        #endregion
     }
 }

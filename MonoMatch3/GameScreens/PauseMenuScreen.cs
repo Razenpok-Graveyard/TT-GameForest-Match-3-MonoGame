@@ -27,20 +27,19 @@ namespace MonoMatch3
         /// <summary>
         /// Constructor.
         /// </summary>
-        public PauseMenuScreen()
-            : base("Paused")
+        public PauseMenuScreen(): base()
         {
             // Create our menu entries.
-            MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
-            MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
+            //MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
+            //MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
             
             // Hook up menu event handlers.
-            resumeGameMenuEntry.Selected += OnCancel;
-            quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
+            //resumeGameMenuEntry.Selected += OnCancel;
+            //quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
 
             // Add entries to the menu.
-            MenuEntries.Add(resumeGameMenuEntry);
-            MenuEntries.Add(quitGameMenuEntry);
+            //MenuEntries.Add(resumeGameMenuEntry);
+            //MenuEntries.Add(quitGameMenuEntry);
         }
 
 

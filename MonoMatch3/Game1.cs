@@ -7,15 +7,23 @@ namespace MonoMatch3
 {
     public class Game1 : Game
     {
+        public static Game1 Instance;
+
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        public SpriteBatch SpriteBatch;
 
         ScreenManager screenManager;
         ScreenFactory screenFactory;
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            IsMouseVisible = true;
+            Instance = this;
+            graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = 800,
+                PreferredBackBufferHeight = 600
+            };
             Content.RootDirectory = "Content";
 
             screenFactory = new ScreenFactory();
@@ -23,13 +31,17 @@ namespace MonoMatch3
 
             screenManager = new ScreenManager(this);
             Components.Add(screenManager);
-            
-            AddInitialScreens();
         }
 
-        private void AddInitialScreens()
+        protected override void LoadContent()
         {
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
             screenManager.AddScreen(new MainMenuScreen(), null);
+        }
+
+        protected override void UnloadContent()
+        {
+            Content.Unload();
         }
 
         protected override void Draw(GameTime gameTime)
