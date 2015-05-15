@@ -39,6 +39,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameScreens\BackgroundScreen.cs" />
+    <Compile Include="GameScreens\Button.cs" />
+    <Compile Include="GameScreens\GameplayScreen.cs" />
+    <Compile Include="GameScreens\LoadingScreen.cs" />
+    <Compile Include="GameScreens\MainMenuScreen.cs" />
+    <Compile Include="GameScreens\MenuEntry.cs" />
+    <Compile Include="GameScreens\MenuScreen.cs" />
+    <Compile Include="GameScreens\MessageBoxScreen.cs" />
+    <Compile Include="GameScreens\OptionsMenuScreen.cs" />
+    <Compile Include="GameScreens\PauseMenuScreen.cs" />
+    <Compile Include="GameScreens\PlayerIndexEventArgs.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />
     <Compile Include="GameStateManagement\InputAction.cs" />
     <Compile Include="GameStateManagement\InputState.cs" />
@@ -62,17 +73,39 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Background.xnb" />
-    <None Include="Content\Diamond.xnb" />
-    <None Include="Content\Ellipsis.xnb" />
-    <None Include="Content\Font.xnb" />
-    <None Include="Content\GameOver.xnb" />
-    <None Include="Content\Hexagon.xnb" />
-    <None Include="Content\OK.xnb" />
-    <None Include="Content\Pentagon.xnb" />
-    <None Include="Content\Play.xnb" />
-    <None Include="Content\Square.xnb" />
-    <None Include="Content\Triangle.xnb" />
+    <None Include="Content\Background.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Diamond.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Ellipsis.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Font.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\GameOver.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Hexagon.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\OK.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Pentagon.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Play.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Square.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\Triangle.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
