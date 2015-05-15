@@ -39,6 +39,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="GameStateManagement\GameScreen.cs" />
+    <Compile Include="GameStateManagement\InputAction.cs" />
+    <Compile Include="GameStateManagement\InputState.cs" />
+    <Compile Include="GameStateManagement\IScreenFactory.cs" />
+    <Compile Include="GameStateManagement\ScreenManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenFactory.cs" />
