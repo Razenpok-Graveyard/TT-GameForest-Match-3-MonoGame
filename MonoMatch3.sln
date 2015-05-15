@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoMatch3", "MonoMatch3\MonoMatch3.csproj", "{34093A69-93DE-42A2-B90A-472F7CCF0987}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameStateManagement", "GameStateManagement\GameStateManagement.csproj", "{0A551D79-F37E-4529-9CA0-3FD2E9EA715E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -17,10 +15,6 @@ Global
 		{34093A69-93DE-42A2-B90A-472F7CCF0987}.Debug|x86.Build.0 = Debug|x86
 		{34093A69-93DE-42A2-B90A-472F7CCF0987}.Release|x86.ActiveCfg = Release|x86
 		{34093A69-93DE-42A2-B90A-472F7CCF0987}.Release|x86.Build.0 = Release|x86
-		{0A551D79-F37E-4529-9CA0-3FD2E9EA715E}.Debug|x86.ActiveCfg = Debug|x86
-		{0A551D79-F37E-4529-9CA0-3FD2E9EA715E}.Debug|x86.Build.0 = Debug|x86
-		{0A551D79-F37E-4529-9CA0-3FD2E9EA715E}.Release|x86.ActiveCfg = Release|x86
-		{0A551D79-F37E-4529-9CA0-3FD2E9EA715E}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
