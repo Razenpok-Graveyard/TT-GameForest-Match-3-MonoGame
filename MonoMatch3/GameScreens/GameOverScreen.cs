@@ -19,7 +19,7 @@ namespace MonoMatch3
     /// The pause menu comes up over the top of the game,
     /// giving the player options to resume or quit.
     /// </summary>
-    class PauseMenuScreen : MenuScreen
+    class GameOverScreen : MenuScreen
     {
         #region Initialization
 
@@ -27,7 +27,7 @@ namespace MonoMatch3
         /// <summary>
         /// Constructor.
         /// </summary>
-        public PauseMenuScreen(): base()
+        public GameOverScreen(): base()
         {
             // Create our menu entries.
             //MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
@@ -70,7 +70,7 @@ namespace MonoMatch3
         /// </summary>
         void ConfirmQuitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, false, null, new BackgroundScreen(),
+            LoadingScreen.Load(ScreenManager, null, new BackgroundScreen(),
                                                            new MainMenuScreen());
         }
 
