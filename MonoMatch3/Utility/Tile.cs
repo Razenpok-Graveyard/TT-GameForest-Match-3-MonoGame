@@ -43,10 +43,11 @@ namespace MonoMatch3
             OnRemove = onRemove;
         }
 
-        public void MoveTo(Vector2 target)
+        public void MoveTo(Vector2 target, Point arrayPosition)
         {
             IsMoving = true;
             targetPosition = target;
+            ArrayPosition = arrayPosition;
         }
 
         public void BeginSpinning()
@@ -91,7 +92,7 @@ namespace MonoMatch3
         {
             if (!IsMoving) return;
             var differenceToTarget = targetPosition - Position;
-            if (differenceToTarget.X < 1 && differenceToTarget.Y < 1)
+            if (Math.Abs(differenceToTarget.X) < 1 && Math.Abs(differenceToTarget.Y) < 1)
             {
                 IsMoving = false;
                 Position = targetPosition;

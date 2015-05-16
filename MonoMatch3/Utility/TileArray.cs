@@ -47,7 +47,7 @@ namespace MonoMatch3
                         var nextTile = new Point(x, i);
                         if (this[nextTile] == null) continue;
                         this[currentTile] = this[nextTile];
-                        this[nextTile].MoveTo(gameField.ToTilePosition(x,y).ToVector2());
+                        this[nextTile].MoveTo(gameField.ToTilePosition(x,y).ToVector2(), new Point(x, y));
                         this[nextTile] = null;
                         onlyEmptyLeft = false;
                         break;
@@ -67,7 +67,7 @@ namespace MonoMatch3
                 tile.Position = gameField.ToTilePosition(column, height).ToVector2();
                 tile.ArrayPosition = currentTile;
                 this[currentTile] = tile;
-                tile.MoveTo(gameField.ToTilePosition(column, y).ToVector2());
+                tile.MoveTo(gameField.ToTilePosition(column, y).ToVector2(), new Point(column, y));
                 break;
             }
         }

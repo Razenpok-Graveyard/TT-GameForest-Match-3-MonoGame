@@ -92,13 +92,14 @@ namespace MonoMatch3
                     {
                         foreach (var tile in matches)
                         {
-                            tile.Remove(() => { tiles[tile.ArrayPosition] = null; });
+                            var position = tile.ArrayPosition; 
+                            tile.Remove(() => { tiles[position] = null; });
                             ScoreManager.Add(1);
                         }
                     }
                     else
                     {
-                        SwapTiles(selectedTile.ArrayPosition, swappedTile.ArrayPosition);
+                        SwapTiles(swappedTile.ArrayPosition, selectedTile.ArrayPosition);
                     }
                     selectedTile = null;
                     swappedTile = null;
@@ -146,9 +147,10 @@ namespace MonoMatch3
         private void SwapTiles(Point first, Point second)
         {
             var firstTile = tiles[first];
-            firstTile.MoveTo(field.ToTilePosition(second.X, second.Y).ToVector2());
-            tiles[second].MoveTo(field.ToTilePosition(first.X, first.Y).ToVector2());
-            tiles[first] = tiles[second];
+            var secondTile = tiles[second];
+            firstTile.MoveTo(field.ToTilePosition(second.X, second.Y).ToVector2(),second);
+            tiles[second].MoveTo(field.ToTilePosition(first.X, first.Y).ToVector2(), first);
+            tiles[first] = secondTile;
             tiles[second] = firstTile;
         }
 
