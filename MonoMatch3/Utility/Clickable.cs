@@ -7,14 +7,14 @@ namespace MonoMatch3
     {
         protected Rectangle Rectangle { get; set;}
 
-        public Point Position
+        public Point RectanglePosition
         {
             get { return new Point(Rectangle.X, Rectangle.Y); }
-            set { Rectangle = new Rectangle(Position, value);}
+            set { Rectangle = new Rectangle(value, Rectangle.Size);}
         }
 
         protected bool IsHighlighted { get; private set; }
-        protected bool IsClicked;
+        public bool IsClicked;
 
         private ButtonState oldClickState = Mouse.GetState().LeftButton;
 

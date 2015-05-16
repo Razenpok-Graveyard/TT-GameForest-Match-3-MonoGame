@@ -39,6 +39,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
+    <Compile Include="Tiles\Diamond.cs" />
+    <Compile Include="Tiles\Ellipsis.cs" />
+    <Compile Include="Tiles\Hexagon.cs" />
+    <Compile Include="Tiles\Pentagon.cs" />
+    <Compile Include="Tiles\Square.cs" />
+    <Compile Include="Tiles\TileFactory.cs" />
+    <Compile Include="Tiles\TileTextureProvider.cs" />
+    <Compile Include="Tiles\Triangle.cs" />
     <Compile Include="Utility\Button.cs" />
     <Compile Include="Utility\Clickable.cs" />
     <Compile Include="GameScreens\GameplayScreen.cs" />
