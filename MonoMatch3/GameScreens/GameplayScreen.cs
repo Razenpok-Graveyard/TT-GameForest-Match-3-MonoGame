@@ -8,196 +8,75 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MonoMatch3
 {
-    /// <summary>
-    /// This screen implements the actual game logic. It is just a
-    /// placeholder to get the idea across: you'll probably want to
-    /// put some more interesting gameplay in here!
-    /// </summary>
     class GameplayScreen : GameScreen
     {
+        private GameField field = new GameField();
         ContentManager content;
-        SpriteFont gameFont;
+        SpriteFont font;
 
-        Vector2 playerPosition = new Vector2(100, 100);
-        Vector2 enemyPosition = new Vector2(100, 100);
+        readonly InputAction pauseAction;
 
-        Random random = new Random();
-
-        float pauseAlpha;
-
-        InputAction pauseAction;
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         public GameplayScreen()
         {
-            TransitionOnTime = TimeSpan.FromSeconds(0);
-            TransitionOffTime = TimeSpan.FromSeconds(0);
-
             pauseAction = new InputAction(
-                new Buttons[] { Buttons.Start, Buttons.Back },
-                new Keys[] { Keys.Escape },
+                new Buttons[] {},
+                new [] { Keys.Escape, },
                 true);
         }
 
-
-        /// <summary>
-        /// Load graphics content for the game.
-        /// </summary>
         public override void Activate(bool instancePreserved)
         {
-            if (!instancePreserved)
-            {
-                if (content == null)
-                    content = new ContentManager(ScreenManager.Game.Services, "Content");
-
-                var texture = content.Load<Texture2D>("Play");
-                testplay = new Button(texture, new Point(50, 50));
-                gameFont = content.Load<SpriteFont>("Font");
-
-                // A real game would probably have more content than this sample, so
-                // it would take longer to load. We simulate that by delaying for a
-                // while, giving you a chance to admire the beautiful loading screen.
-                Thread.Sleep(1000);
-
-                // once the load has finished, we use ResetElapsedTime to tell the game's
-                // timing mechanism that we have just finished a very long frame, and that
-                // it should not try to catch up.
-                ScreenManager.Game.ResetElapsedTime();
-            }
+            if (instancePreserved) return;
+            if (content == null)
+                content = new ContentManager(ScreenManager.Game.Services, "Content");
+            font = content.Load<SpriteFont>("Font");
+            ScreenManager.Game.ResetElapsedTime();
+            TimeManager.OnTimeUp = OnTimeUp;
+            TimeManager.StartTimer(3);
         }
 
-        public override void Unload()
+        private void OnTimeUp()
         {
-            content.Unload();
+            ScreenManager.AddScreen(new GameOverScreen(), PlayerIndex.One);
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,
                                                        bool coveredByOtherScreen)
         {
+            
             base.Update(gameTime, otherScreenHasFocus, false);
-
-            // Gradually fade in or out depending on whether we are covered by the pause screen.
-            if (coveredByOtherScreen)
-                pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
-            else
-                pauseAlpha = Math.Max(pauseAlpha - 1f / 32, 0);
-
             if (IsActive)
             {
-                // Apply some random jitter to make the enemy move around.
-                const float randomization = 10;
-
-                enemyPosition.X += (float)(random.NextDouble() - 0.5) * randomization;
-                enemyPosition.Y += (float)(random.NextDouble() - 0.5) * randomization;
-
-                // Apply a stabilizing force to stop the enemy moving off the screen.
-                Vector2 targetPosition = new Vector2(
-                    ScreenManager.GraphicsDevice.Viewport.Width / 2 - gameFont.MeasureString("Insert Gameplay Here").X / 2, 
-                    200);
-
-                enemyPosition = Vector2.Lerp(enemyPosition, targetPosition, 0.05f);
-
+                TimeManager.UpdateTimer(gameTime);
                 // TODO: this game isn't very fun! You could probably improve
                 // it by inserting something more interesting in this space :-)
             }
         }
 
-
-        /// <summary>
-        /// Lets the game respond to player input. Unlike the Update method,
-        /// this will only be called when the gameplay screen is active.
-        /// </summary>
         public override void HandleInput(GameTime gameTime, InputState input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
 
-            // Look up inputs for the active player profile.
-            int playerIndex = (int)ControllingPlayer.Value;
-
-            KeyboardState keyboardState = input.CurrentKeyboardStates[playerIndex];
-            GamePadState gamePadState = input.CurrentGamePadStates[playerIndex];
-
-            // The game pauses either if the user presses the pause button, or if
-            // they unplug the active gamepad. This requires us to keep track of
-            // whether a gamepad was ever plugged in, because we don't want to pause
-            // on PC if they are playing with a keyboard and have no gamepad at all!
-            bool gamePadDisconnected = !gamePadState.IsConnected &&
-                                       input.GamePadWasConnected[playerIndex];
-
             PlayerIndex player;
-            if (pauseAction.Evaluate(input, ControllingPlayer, out player) || gamePadDisconnected)
+            if (pauseAction.Evaluate(input, ControllingPlayer, out player))
             {
-                ScreenManager.AddScreen(new GameOverScreen(), ControllingPlayer);
+                ScreenManager.AddScreen(new GameOverScreen(), PlayerIndex.One);
             }
 
-            else
-            {
-                // Otherwise move the player position.
-                Vector2 movement = Vector2.Zero;
-
-                if (keyboardState.IsKeyDown(Keys.Left))
-                    movement.X--;
-
-                if (keyboardState.IsKeyDown(Keys.Right))
-                    movement.X++;
-
-                if (keyboardState.IsKeyDown(Keys.Up))
-                    movement.Y--;
-
-                if (keyboardState.IsKeyDown(Keys.Down))
-                    movement.Y++;
-
-                Vector2 thumbstick = gamePadState.ThumbSticks.Left;
-
-                movement.X += thumbstick.X;
-                movement.Y -= thumbstick.Y;
-
-                if (input.TouchState.Count > 0)
-                {
-                    Vector2 touchPosition = input.TouchState[0].Position;
-                    Vector2 direction = touchPosition - playerPosition;
-                    direction.Normalize();
-                    movement += direction;
-                }
-
-                if (movement.Length() > 1)
-                    movement.Normalize();
-
-                playerPosition += movement * 8f;
-            }
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed)
+                ScoreManager.Add(1);
         }
-
-        private Button testplay;
 
         public override void Draw(GameTime gameTime)
         {
-            // This game has a blue background. Why? Because!
-            ScreenManager.GraphicsDevice.Clear(ClearOptions.Target,
-                                               Color.CornflowerBlue, 0, 0);
-
-            // Our player and enemy are both actually just text strings.
-            SpriteBatch spriteBatch = ScreenManager.SpriteBatch;
-
+            ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.Black, 0, 0);
+            var spriteBatch = ScreenManager.SpriteBatch;
             spriteBatch.Begin();
-
-            spriteBatch.DrawString(gameFont, "// TODO", playerPosition, Color.Green);
-
-            spriteBatch.DrawString(gameFont, "Insert Gameplay Here",
-                                   enemyPosition, Color.DarkRed);
-
+            spriteBatch.DrawString(font, "Score: " + ScoreManager.Score, new Vector2(10, 25), Color.White);
+            spriteBatch.DrawString(font, "Time: " + TimeManager.RemainingTime, new Vector2(10, 75), Color.White);
             spriteBatch.End();
-
-            // If the game is transitioning on or off, fade it out to black.
-            if (TransitionPosition > 0 || pauseAlpha > 0)
-            {
-                float alpha = MathHelper.Lerp(1f - TransitionAlpha, 1f, pauseAlpha / 2);
-
-                ScreenManager.FadeBackBufferToBlack(alpha);
-            }
-            testplay.Draw(gameTime);
+            field.Draw(gameTime);
         }
     }
 }

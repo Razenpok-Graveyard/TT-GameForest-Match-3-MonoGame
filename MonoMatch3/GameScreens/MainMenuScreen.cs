@@ -8,7 +8,7 @@ namespace MonoMatch3
         public MainMenuScreen()
         {
             var playButtonTexture = Game1.Instance.Content.Load<Texture2D>("Play");
-            var playButton = new Button(playButtonTexture, new Point(300, 350));
+            var playButton = new Button(playButtonTexture, new Point(300, 200));
             playButton.Clicked += PlayButtonClicked;
             MenuButtons.Add(playButton);
         }

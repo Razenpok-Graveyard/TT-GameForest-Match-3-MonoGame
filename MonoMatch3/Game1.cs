@@ -20,7 +20,7 @@ namespace MonoMatch3
             graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferWidth = 800,
-                PreferredBackBufferHeight = 800
+                PreferredBackBufferHeight = 600
             };
             Content.RootDirectory = "Content";
 
