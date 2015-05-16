@@ -2,7 +2,7 @@
 {
     static class ScoreManager
     {
-        public static int Score { get; private set; }
+        public static int Score { get; set; }
 
         public static void Add(int value)
         {

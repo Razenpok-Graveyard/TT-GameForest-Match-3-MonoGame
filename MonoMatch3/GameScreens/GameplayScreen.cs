@@ -38,6 +38,7 @@ namespace MonoMatch3
             ScreenManager.Game.ResetElapsedTime();
             TimeManager.OnTimeUp = OnTimeUp;
             TimeManager.StartTimer();
+            ScoreManager.Score = 0;
         }
 
         private void OnTimeUp()

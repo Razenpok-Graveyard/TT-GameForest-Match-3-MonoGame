@@ -35,7 +35,6 @@ namespace MonoMatch3
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
             screenManager.AddScreen(new MainMenuScreen(), null);
-           // LoadingScreen.Load(screenManager, new GameplayScreen());
         }
 
         protected override void UnloadContent()
