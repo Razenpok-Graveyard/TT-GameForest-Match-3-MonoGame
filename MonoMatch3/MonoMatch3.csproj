@@ -39,14 +39,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Game1.cs" />
-    <Compile Include="GameScreens\BackgroundScreen.cs" />
-    <Compile Include="GameScreens\Button.cs" />
-    <Compile Include="GameScreens\Clickable.cs" />
+    <Compile Include="Utility\Button.cs" />
+    <Compile Include="Utility\Clickable.cs" />
     <Compile Include="GameScreens\GameplayScreen.cs" />
     <Compile Include="GameScreens\LoadingScreen.cs" />
     <Compile Include="GameScreens\MainMenuScreen.cs" />
     <Compile Include="GameScreens\MenuScreen.cs" />
-    <Compile Include="GameScreens\MessageBoxScreen.cs" />
     <Compile Include="GameScreens\GameOverScreen.cs" />
     <Compile Include="GameScreens\PlayerIndexEventArgs.cs" />
     <Compile Include="GameStateManagement\GameScreen.cs" />

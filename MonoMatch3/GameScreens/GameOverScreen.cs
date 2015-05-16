@@ -1,80 +1,34 @@
-#region File Description
-//-----------------------------------------------------------------------------
-// PauseMenuScreen.cs
-//
-// Microsoft XNA Community Game Platform
-// Copyright (C) Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
-#endregion
-
-#region Using Statements
-
-
-
-#endregion
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoMatch3
 {
-    /// <summary>
-    /// The pause menu comes up over the top of the game,
-    /// giving the player options to resume or quit.
-    /// </summary>
     class GameOverScreen : MenuScreen
     {
-        #region Initialization
+        private Texture2D GameOverLabel;
 
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public GameOverScreen(): base()
+        public GameOverScreen()
         {
-            // Create our menu entries.
-            //MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
-            //MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
-            
-            // Hook up menu event handlers.
-            //resumeGameMenuEntry.Selected += OnCancel;
-            //quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
-
-            // Add entries to the menu.
-            //MenuEntries.Add(resumeGameMenuEntry);
-            //MenuEntries.Add(quitGameMenuEntry);
+            var content = Game1.Instance.Content;
+            var okButtonTexture = content.Load<Texture2D>("OK");
+            var okButton = new Button(okButtonTexture, new Point(300, 400));
+            okButton.Clicked += OkButtonClicked;
+            MenuButtons.Add(okButton);
+            GameOverLabel = content.Load<Texture2D>("GameOver");
         }
 
-
-        #endregion
-
-        #region Handle Input
-
-
-        /// <summary>
-        /// Event handler for when the Quit Game menu entry is selected.
-        /// </summary>
-        void QuitGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            const string message = "Are you sure you want to quit this game?";
-
-            MessageBoxScreen confirmQuitMessageBox = new MessageBoxScreen(message);
-
-            confirmQuitMessageBox.Accepted += ConfirmQuitMessageBoxAccepted;
-
-            ScreenManager.AddScreen(confirmQuitMessageBox, ControllingPlayer);
+        void OkButtonClicked(object sender, PlayerIndexEventArgs e)
+        {            
+            LoadingScreen.Load(ScreenManager, new MainMenuScreen());
         }
 
-
-        /// <summary>
-        /// Event handler for when the user selects ok on the "are you sure
-        /// you want to quit" message box. This uses the loading screen to
-        /// transition from the game back to the main menu screen.
-        /// </summary>
-        void ConfirmQuitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
+        public override void Draw(GameTime gameTime)
         {
-            LoadingScreen.Load(ScreenManager, null, new BackgroundScreen(),
-                                                           new MainMenuScreen());
+            var spriteBatch = Game1.Instance.SpriteBatch;
+            spriteBatch.Begin();
+            spriteBatch.Draw(GameOverLabel, new Vector2(200, 100), Color.White);
+            spriteBatch.End();
+            base.Draw(gameTime);
         }
-
-
-        #endregion
     }
 }

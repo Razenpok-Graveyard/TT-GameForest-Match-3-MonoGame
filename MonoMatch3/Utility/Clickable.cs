@@ -16,6 +16,8 @@ namespace MonoMatch3
         protected bool IsHighlighted { get; private set; }
         protected bool IsClicked;
 
+        private ButtonState oldClickState = Mouse.GetState().LeftButton;
+
         protected new Game1 Game { get { return (Game1)base.Game; } }
 
         protected Clickable(Rectangle targetRectangle): base(Game1.Instance)
@@ -34,7 +36,8 @@ namespace MonoMatch3
             var mouseState = Mouse.GetState();
             if (!Rectangle.Contains(new Point(mouseState.X, mouseState.Y))) return;
             IsHighlighted = true;
-            IsClicked = mouseState.LeftButton == ButtonState.Pressed;
+            IsClicked = mouseState.LeftButton == ButtonState.Pressed && oldClickState == ButtonState.Released;
+            oldClickState = mouseState.LeftButton;
         }
     }
 }

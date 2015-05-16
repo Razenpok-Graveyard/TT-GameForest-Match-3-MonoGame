@@ -17,8 +17,7 @@ namespace MonoMatch3
             TransitionOnTime = TimeSpan.FromSeconds(0);
         }
 
-        public static void Load(ScreenManager screenManager, PlayerIndex? controllingPlayer,
-                                params GameScreen[] screensToLoad)
+        public static void Load(ScreenManager screenManager, params GameScreen[] screensToLoad)
         {
             // Tell all the current screens to transition off.
             foreach (GameScreen screen in screenManager.GetScreens())
@@ -27,7 +26,7 @@ namespace MonoMatch3
             // Create and activate the loading screen.
             LoadingScreen loadingScreen = new LoadingScreen(screensToLoad);
 
-            screenManager.AddScreen(loadingScreen, controllingPlayer);
+            screenManager.AddScreen(loadingScreen, PlayerIndex.One);
         }
 
         public override void Update(GameTime gameTime, bool otherScreenHasFocus,

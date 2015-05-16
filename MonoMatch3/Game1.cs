@@ -1,7 +1,6 @@
 ﻿using GameStateManagement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace MonoMatch3
 {
@@ -13,7 +12,6 @@ namespace MonoMatch3
         public SpriteBatch SpriteBatch;
 
         ScreenManager screenManager;
-        ScreenFactory screenFactory;
 
         public Game1()
         {
@@ -26,7 +24,7 @@ namespace MonoMatch3
             };
             Content.RootDirectory = "Content";
 
-            screenFactory = new ScreenFactory();
+            var screenFactory = new ScreenFactory();
             Services.AddService(typeof(IScreenFactory), screenFactory);
 
             screenManager = new ScreenManager(this);
@@ -36,7 +34,8 @@ namespace MonoMatch3
         protected override void LoadContent()
         {
             SpriteBatch = new SpriteBatch(GraphicsDevice);
-            screenManager.AddScreen(new MainMenuScreen(), null);
+            //screenManager.AddScreen(new MainMenuScreen(), null);
+            LoadingScreen.Load(screenManager, new GameplayScreen());
         }
 
         protected override void UnloadContent()

@@ -7,8 +7,7 @@ namespace MonoMatch3
     {
         public MainMenuScreen()
         {
-            var content = Game1.Instance.Content;
-            var playButtonTexture = content.Load<Texture2D>("Play");
+            var playButtonTexture = Game1.Instance.Content.Load<Texture2D>("Play");
             var playButton = new Button(playButtonTexture, new Point(300, 350));
             playButton.Clicked += PlayButtonClicked;
             MenuButtons.Add(playButton);
@@ -16,8 +15,7 @@ namespace MonoMatch3
 
         void PlayButtonClicked(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, PlayerIndex.One,
-                               new GameplayScreen());
+            LoadingScreen.Load(ScreenManager, new GameplayScreen());
         }
     }
 }
